@@ -26,3 +26,28 @@ The output includes:
 ### Scope
 
 This helper is limited to handshake identification and reporting. It does not use [`utility/rockyou.txt`](./utility/rockyou.txt) or attempt password recovery.
+
+## Ubuntu Wi-Fi Survey
+
+The repository also includes [`ubuntu_wifi_survey.py`](./ubuntu_wifi_survey.py), a small Ubuntu-oriented helper that:
+
+- detects wireless interfaces reported by NetworkManager
+- scans nearby Wi-Fi networks and shows SSIDs, BSSIDs, channels, signal, and security
+- lets you select a network interactively or preselect an interface/SSID with flags
+
+### Requirements
+
+- `python3`
+- `nmcli` available on your Ubuntu machine
+
+### Usage
+
+```bash
+python3 ubuntu_wifi_survey.py
+python3 ubuntu_wifi_survey.py --interface wlan0
+python3 ubuntu_wifi_survey.py --interface wlan0 --ssid ExampleNetwork
+```
+
+### Scope
+
+This helper intentionally stops at network discovery and selection. It does not enable monitor mode or start packet capture.
