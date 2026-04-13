@@ -1,53 +1,47 @@
-# CS-427-MITM-Project
-This project is the course project repository for WSU's CS 427 Cybersecurity course in the Spring 2026 semester.
+# CPTS-427-MITM-Project
 
-## WPA Handshake Detection
+## Class
+CPTS 427 Cybersecurity, Spring 2026, Washington State University
 
-The repository now includes [`detect_wpa_handshakes.py`](./detect_wpa_handshakes.py), a small CLI that inspects an 802.11 capture and reports WPA 4-way handshake attempts by AP/client pair.
+## The team
+- Joshua Chadwick
+- Zachary Felcyn
+- Asa Fischer
 
-### Requirements
+## Project Documents
+- [Project Proposal](docs/project_proposal.md)
+- [Technical Notes](docs/technical_notes.md)
 
-- `python3`
-- `tshark` available on your `PATH`
+## Project Overview and Goals
+This project demonstrates wireless man-in-the-middle concepts in a controlled lab environment. The main goal is to understand how wireless clients can be disrupted, redirected, and observed when common Wi-Fi security weaknesses are present.
 
-### Usage
+Our goals include:
+- Demonstrate a de-authentication attack against a lab device.
+- Explore Evil Twin access point behavior and how clients can be tricked into reconnecting.
+- Capture and analyze WPA2 4-way handshake traffic.
+- Test password-cracking risk when weak or common passphrases are used.
+- Use a captive portal as an educational example of credential-harvesting risk.
+- Keep all testing limited to equipment and networks we control.
 
-```bash
-python3 detect_wpa_handshakes.py sample_capture.cap
-python3 detect_wpa_handshakes.py sample_capture.cap --show-partial
-```
+## Themes Used
+- **Wireless protocol security:** We studied how Wi-Fi clients, access points, authentication, and reassociation behave during normal and disrupted network activity.
+- **Man-in-the-middle attacks:** The project focuses on how an attacker can position a rogue access point between a client and the expected network path.
+- **WPA2 handshake analysis:** We captured handshake traffic and reviewed how weak pre-shared keys can be vulnerable to dictionary attacks.
+- **Social engineering and captive portals:** We explored how a fake login flow can exploit user trust even when the technical network setup appears familiar.
+- **Ethical security testing:** The work was designed around isolated lab networks, owned hardware, and educational demonstration rather than real-world exploitation.
 
-The output includes:
+## Design Decisions and Trade-Offs
+We chose a lab-based setup so the project could safely demonstrate realistic wireless attack concepts without affecting outside networks. This made the work more controlled and ethical, but it also meant the results depended on our own hardware, adapter support, and test access point configuration.
 
-- complete handshake sets with messages 1 through 4
-- incomplete handshake attempts that may contain only a subset of EAPOL messages
-- frame numbers, timestamps, replay counters, and retry counts
+We focused on WPA2 and intentionally weak or known test passwords because they make the handshake and dictionary-attack workflow easier to demonstrate. This trade-off reduced realism for stronger modern networks, but it made the security lesson clearer: weak passphrases can fail quickly once an attacker captures the right traffic.
 
-### Scope
+We also separated discovery, capture, cracking, and captive portal work into smaller steps. This made the project easier to test and explain, although it required more setup and coordination than a single automated tool.
 
-This helper is limited to handshake identification and reporting. It does not use [`utility/rockyou.txt`](./utility/rockyou.txt) or attempt password recovery.
+## Challenges Encountered and Lessons Learned
+One major challenge was working with wireless adapter support. Not every Wi-Fi card supports monitor mode, and the tools behaved differently depending on the operating system, drivers, and chipset.
 
-## Ubuntu Wi-Fi Survey
+Another challenge was reliably capturing useful handshake traffic. The network interface had to be on the correct channel, and the target client needed to reconnect at the right time for the capture to contain the necessary EAPOL messages.
 
-The repository also includes [`ubuntu_wifi_survey.py`](./ubuntu_wifi_survey.py), a small Ubuntu-oriented helper that:
+We also learned that the most effective security demonstrations are not always the most complex ones. A controlled setup with a weak password, clear packet capture, and careful analysis made the risks easier to understand than trying to simulate every part of a real attack chain.
 
-- detects wireless interfaces reported by NetworkManager
-- scans nearby Wi-Fi networks and shows SSIDs, BSSIDs, channels, signal, and security
-- lets you select a network interactively or preselect an interface/SSID with flags
-
-### Requirements
-
-- `python3`
-- `nmcli` available on your Ubuntu machine
-
-### Usage
-
-```bash
-python3 ubuntu_wifi_survey.py
-python3 ubuntu_wifi_survey.py --interface wlan0
-python3 ubuntu_wifi_survey.py --interface wlan0 --ssid ExampleNetwork
-```
-
-### Scope
-
-This helper intentionally stops at network discovery and selection. It does not enable monitor mode or start packet capture.
+Overall, the project reinforced the importance of strong Wi-Fi passwords, modern wireless protections, user awareness around captive portals, and strict ethical boundaries when practicing cybersecurity techniques.
