@@ -1,0 +1,5 @@
+Enable internet for connected devices (recommended for realistic demo)
+Run these commands after the hotspot is up (or add them to the script):
+Bashsudo sysctl -w net.ipv4.ip_forward=1
+sudo iptables -t nat -A POSTROUTING -o <your_internet_interface> -j MASQUERADE   # e.g. eth0 or wlan1
+Replace <your_internet_interface> with your upstream connection (check with nmcli device).
