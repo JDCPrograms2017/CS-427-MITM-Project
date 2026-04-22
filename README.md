@@ -12,6 +12,11 @@ CPTS 427 Cybersecurity, Spring 2026, Washington State University
 - [Project Proposal](docs/project_proposal.md)
 - [Technical Notes](docs/technical_notes.md)
 
+## Project Videos
+- [Deauth Demo on Flipper](https://www.youtube.com/watch?v=_ZSqvmoLcEY)
+- [Evil Twin Demo](https://www.youtube.com/watch?v=example)
+
+
 ## Project Overview and Goals
 This project demonstrates wireless man-in-the-middle concepts in a controlled lab environment. The main goal is to understand how wireless clients can be disrupted, redirected, and observed when common Wi-Fi security weaknesses are present.
 
