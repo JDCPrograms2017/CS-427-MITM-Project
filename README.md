@@ -14,7 +14,7 @@ CPTS 427 Cybersecurity, Spring 2026, Washington State University
 
 ## Project Videos
 - [Deauth Demo on Flipper](https://www.youtube.com/watch?v=_ZSqvmoLcEY)
-- [Evil Twin Demo](https://www.youtube.com/watch?v=example](https://www.youtube.com/watch?v=gxdjEiMLCFM))
+- [Evil Twin Demo](https://youtu.be/gxdjEiMLCFM)
 
 
 ## Project Overview and Goals
